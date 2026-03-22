@@ -4,6 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
+## Docs-First Requirement
+
+**Before generating any code, always read the relevant file(s) in `/docs/` first.** The `/docs/` directory contains coding standards and conventions that all generated code must follow. If a relevant docs file exists for the area you are working in (UI, API, database, etc.), consult it before writing any code.
+
+- /docs/ui.md
+- /docs/data-fetching.md
+
 ## Commands
 
 ```bash
