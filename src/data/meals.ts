@@ -2,12 +2,51 @@ import { db } from "@/db";
 import { meals, mealFoodItems, foodItems } from "@/db/schema";
 import { eq, and, gte, lt, sum } from "drizzle-orm";
 
+export async function createMeal(
+  userId: string,
+  name: string,
+  eatenAt: Date
+): Promise<void> {
+  await db.insert(meals).values({ userId, name, eatenAt });
+}
+
 export type MealWithCalories = {
   id: string;
   name: string;
   eatenAt: Date;
   totalCalories: number;
 };
+
+export type Meal = {
+  id: string;
+  name: string;
+  eatenAt: Date;
+};
+
+export async function getMealById(
+  userId: string,
+  mealId: string
+): Promise<Meal | null> {
+  const rows = await db
+    .select({ id: meals.id, name: meals.name, eatenAt: meals.eatenAt })
+    .from(meals)
+    .where(and(eq(meals.id, mealId), eq(meals.userId, userId)))
+    .limit(1);
+
+  return rows[0] ?? null;
+}
+
+export async function updateMeal(
+  userId: string,
+  mealId: string,
+  name: string,
+  eatenAt: Date
+): Promise<void> {
+  await db
+    .update(meals)
+    .set({ name, eatenAt, updatedAt: new Date() })
+    .where(and(eq(meals.id, mealId), eq(meals.userId, userId)));
+}
 
 export async function getMealsForDate(
   userId: string,
